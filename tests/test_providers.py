@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 from scripts.providers.base import BaseProvider
 from scripts.providers.anthropic_provider import AnthropicProvider
 from scripts.providers.openai_provider import OpenAIProvider
+from scripts.providers.local_provider import LocalProvider
 
 
 def test_base_provider_cannot_be_instantiated_directly():
@@ -76,3 +77,40 @@ def test_openai_provider_default_model():
     with patch("openai.OpenAI"):
         provider = OpenAIProvider(api_key="test-key")
         assert provider._model == "gpt-4o"
+
+
+def test_local_provider_name():
+    provider = LocalProvider(base_url="http://localhost:11434", model_name="llama3")
+    assert provider.name == "local"
+
+
+def test_local_provider_review_calls_ollama_api():
+    with patch("requests.post") as mock_post:
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "choices": [{"message": {"content": "로컬 모델 리뷰 결과"}}]
+        }
+        mock_response.raise_for_status = MagicMock()
+        mock_post.return_value = mock_response
+
+        provider = LocalProvider(base_url="http://localhost:11434", model_name="llama3")
+        result = provider.review("시스템 프롬프트", "코드 내용")
+
+        assert result == "로컬 모델 리뷰 결과"
+        mock_post.assert_called_once()
+
+
+def test_local_provider_uses_openai_compatible_endpoint():
+    with patch("requests.post") as mock_post:
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "choices": [{"message": {"content": "결과"}}]
+        }
+        mock_response.raise_for_status = MagicMock()
+        mock_post.return_value = mock_response
+
+        provider = LocalProvider(base_url="http://localhost:11434", model_name="llama3")
+        provider.review("prompt", "content")
+
+        call_url = mock_post.call_args[0][0]
+        assert "/v1/chat/completions" in call_url
