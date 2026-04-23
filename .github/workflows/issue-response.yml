@@ -1,8 +1,21 @@
 name: AI 이슈 자동 응답
 
 on:
-  issues:
-    types: [opened]
+  workflow_call:
+    inputs:
+      repository:
+        description: "이슈가 속한 저장소 (예: org/repo)"
+        required: true
+        type: string
+      issue_number:
+        description: "이슈 번호"
+        required: true
+        type: number
+    secrets:
+      ANTHROPIC_API_KEY:
+        required: false
+      OPENAI_API_KEY:
+        required: false
 
 permissions:
   issues: write
@@ -12,8 +25,10 @@ jobs:
   respond:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout .github 저장소
+      - name: 리뷰어 저장소 체크아웃
         uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -26,8 +41,8 @@ jobs:
       - name: AI 이슈 응답 실행
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_REPOSITORY: ${{ inputs.repository }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
           AI_PROVIDER: ${{ vars.AI_PROVIDER }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
