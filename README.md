@@ -69,6 +69,7 @@ jobs:
       # local_model_url: "http://..."          # 로컬 모델 사용 시 (선택)
       # local_model_name: "llama3"             # 로컬 모델 사용 시 (선택)
     secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 ```
@@ -102,6 +103,7 @@ jobs:
       # local_model_url: "http://..."          # 로컬 모델 사용 시 (선택)
       # local_model_name: "llama3"             # 로컬 모델 사용 시 (선택)
     secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 ```
