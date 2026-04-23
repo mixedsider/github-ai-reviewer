@@ -1,0 +1,37 @@
+name: AI 이슈 자동 응답
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  respond:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout .github 저장소
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r scripts/requirements.txt
+
+      - name: AI 이슈 응답 실행
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          AI_PROVIDER: ${{ vars.AI_PROVIDER }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
+          LOCAL_MODEL_URL: ${{ vars.LOCAL_MODEL_URL }}
+          LOCAL_MODEL_NAME: ${{ vars.LOCAL_MODEL_NAME }}
+        run: python scripts/review.py issue
