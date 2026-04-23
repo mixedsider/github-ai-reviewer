@@ -11,7 +11,29 @@ on:
         description: "PR 번호"
         required: true
         type: number
+      ai_provider:
+        description: "AI 제공자 (anthropic/openai/local)"
+        required: false
+        default: "anthropic"
+        type: string
+      openai_model:
+        description: "OpenAI 모델명"
+        required: false
+        default: "gpt-4o"
+        type: string
+      local_model_url:
+        description: "로컬 모델 엔드포인트"
+        required: false
+        default: ""
+        type: string
+      local_model_name:
+        description: "로컬 모델명"
+        required: false
+        default: "llama3"
+        type: string
     secrets:
+      GITHUB_TOKEN:
+        required: true
       ANTHROPIC_API_KEY:
         required: false
       OPENAI_API_KEY:
@@ -28,7 +50,8 @@ jobs:
       - name: 리뷰어 저장소 체크아웃
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.repository }}
+          repository: ${{ github.action_repository }}
+          ref: ${{ github.action_ref }}
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -43,10 +66,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ inputs.repository }}
           PR_NUMBER: ${{ inputs.pr_number }}
-          AI_PROVIDER: ${{ vars.AI_PROVIDER }}
+          AI_PROVIDER: ${{ inputs.ai_provider }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ vars.OPENAI_MODEL }}
-          LOCAL_MODEL_URL: ${{ vars.LOCAL_MODEL_URL }}
-          LOCAL_MODEL_NAME: ${{ vars.LOCAL_MODEL_NAME }}
+          OPENAI_MODEL: ${{ inputs.openai_model }}
+          LOCAL_MODEL_URL: ${{ inputs.local_model_url }}
+          LOCAL_MODEL_NAME: ${{ inputs.local_model_name }}
         run: python scripts/review.py pr

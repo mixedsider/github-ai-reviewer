@@ -64,12 +64,15 @@ def get_provider():
 
 
 def parse_ai_json(text: str) -> dict:
-    match = re.search(r"\{.*\}", text, re.DOTALL)
-    if match:
+    # JSON 블록을 가장 바깥 { } 기준으로 찾아 파싱
+    start = text.find("{")
+    end = text.rfind("}")
+    if start != -1 and end != -1 and end > start:
         try:
-            return json.loads(match.group())
+            return json.loads(text[start:end + 1])
         except json.JSONDecodeError:
             pass
+    logger.warning("AI 응답에서 JSON 파싱 실패. 원본 텍스트를 사용합니다.")
     return {}
 
 

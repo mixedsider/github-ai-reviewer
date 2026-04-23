@@ -7,7 +7,8 @@ ORM_CONTENT_PATTERNS = {
     r".*/models?\.py$": None,
     r".*\.py$": r"(db\.Model|Base)",
     r".*/schema\.prisma$": None,
-    r".*\.ts$": r"@Entity\(\)",
+    r".*/entit(y|ies)/.*\.ts$": r"@Entity\(\)",
+    r".*/entity/.*\.ts$": r"@Entity\(\)",
 }
 
 DB_REVIEW_PROMPT = """당신은 데이터베이스 전문가입니다. 다음 ORM 엔티티/모델 파일의 변경사항을 분석하고 아래 항목을 체크하세요:
@@ -50,10 +51,15 @@ class DBAnalyzer:
                         changed_files.append(filepath)
                         break
 
+        orm_diff_parts = []
+        for filepath in changed_files:
+            orm_diff_parts.append(f"+++ b/{filepath}")
+            orm_diff_parts.append("\n".join(file_diff_map[filepath]))
+
         return {
             "has_changes": len(changed_files) > 0,
             "changed_files": changed_files,
-            "diff_content": full_diff,
+            "diff_content": "\n".join(orm_diff_parts),
         }
 
     def build_db_review_prompt(self, changes: dict) -> str:
