@@ -11,6 +11,10 @@ on:
   issues:
     types: [opened]
 
+permissions:
+  issues: write
+  contents: read
+
 jobs:
   respond:
     uses: your-username/github-ai-reviewer/.github/workflows/issue-response.yml@main

@@ -48,6 +48,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  pull-requests: write
+  contents: read
+
 jobs:
   review:
     uses: mixedsider/github-ai-reviewer/.github/workflows/pr-review.yml@main
@@ -76,6 +80,10 @@ name: AI 이슈 자동 응답
 on:
   issues:
     types: [opened]
+
+permissions:
+  issues: write
+  contents: read
 
 jobs:
   respond:

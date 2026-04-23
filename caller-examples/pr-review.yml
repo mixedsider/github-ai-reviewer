@@ -11,6 +11,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  pull-requests: write
+  contents: read
+
 jobs:
   review:
     uses: your-username/github-ai-reviewer/.github/workflows/pr-review.yml@main
