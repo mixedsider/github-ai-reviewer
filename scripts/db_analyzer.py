@@ -1,15 +1,6 @@
 import re
 
 
-ORM_FILE_PATTERNS = [
-    r"src/.*\.java$",
-    r"src/.*\.kt$",
-    r".*/models?\.py$",
-    r".*\.py$",
-    r".*/schema\.prisma$",
-    r".*\.ts$",
-]
-
 ORM_CONTENT_PATTERNS = {
     r"src/.*\.java$": r"@Entity",
     r"src/.*\.kt$": r"@Entity",
@@ -55,7 +46,7 @@ class DBAnalyzer:
             file_content = "\n".join(diff_lines)
             for file_pattern, content_pattern in ORM_CONTENT_PATTERNS.items():
                 if re.search(file_pattern, filepath):
-                    if content_pattern is None or re.search(content_pattern, full_diff):
+                    if content_pattern is None or re.search(content_pattern, file_content):
                         changed_files.append(filepath)
                         break
 
