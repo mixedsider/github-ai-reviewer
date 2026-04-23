@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 from scripts.providers.base import BaseProvider
 from scripts.providers.anthropic_provider import AnthropicProvider
+from scripts.providers.openai_provider import OpenAIProvider
 
 
 def test_base_provider_cannot_be_instantiated_directly():
@@ -50,3 +51,28 @@ def test_anthropic_provider_uses_correct_model():
 
         call_kwargs = mock_client.messages.create.call_args[1]
         assert call_kwargs["model"] == "claude-opus-4-7"
+
+
+def test_openai_provider_name():
+    provider = OpenAIProvider(api_key="test-key")
+    assert provider.name == "openai"
+
+
+def test_openai_provider_review_calls_api():
+    with patch("openai.OpenAI") as mock_client_class:
+        mock_client = MagicMock()
+        mock_client_class.return_value = mock_client
+        mock_response = MagicMock()
+        mock_response.choices = [MagicMock(message=MagicMock(content="GPT 리뷰 결과"))]
+        mock_client.chat.completions.create.return_value = mock_response
+
+        provider = OpenAIProvider(api_key="test-key")
+        result = provider.review("시스템 프롬프트", "코드 내용")
+
+        assert result == "GPT 리뷰 결과"
+
+
+def test_openai_provider_default_model():
+    with patch("openai.OpenAI"):
+        provider = OpenAIProvider(api_key="test-key")
+        assert provider._model == "gpt-4o"
