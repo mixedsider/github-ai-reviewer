@@ -62,6 +62,7 @@ jobs:
 
       - name: AI 코드 리뷰 실행
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ inputs.repository }}
           PR_NUMBER: ${{ inputs.pr_number }}
           AI_PROVIDER: ${{ inputs.ai_provider }}
