@@ -16,6 +16,11 @@ on:
         required: false
         default: "anthropic"
         type: string
+      anthropic_model:
+        description: "Anthropic 모델명"
+        required: false
+        default: "claude-sonnet-4-6"
+        type: string
       openai_model:
         description: "OpenAI 모델명"
         required: false
@@ -68,6 +73,7 @@ jobs:
           ISSUE_NUMBER: ${{ inputs.issue_number }}
           AI_PROVIDER: ${{ inputs.ai_provider }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ inputs.anthropic_model }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ inputs.openai_model }}
           LOCAL_MODEL_URL: ${{ inputs.local_model_url }}
