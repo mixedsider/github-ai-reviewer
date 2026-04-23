@@ -1,5 +1,7 @@
 # GitHub AI 자동 코드 리뷰어
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 GitHub Organization의 PR과 이슈가 생성될 때 AI가 자동으로 코드를 심층 분석하고 템플릿 기반 댓글을 작성하는 GitHub Actions 시스템입니다.
 
 ## 주요 기능
