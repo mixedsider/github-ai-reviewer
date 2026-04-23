@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   respond:
-    uses: your-username/github-ai-reviewer/.github/workflows/issue-response.yml@main
+    uses: mixedsider/github-ai-reviewer/.github/workflows/issue-response.yml@main
     with:
       repository: ${{ github.repository }}
       issue_number: ${{ github.event.issue.number }}

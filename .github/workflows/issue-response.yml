@@ -42,10 +42,6 @@ on:
       OPENAI_API_KEY:
         required: false
 
-permissions:
-  issues: write
-  contents: read
-
 jobs:
   respond:
     runs-on: ubuntu-latest
@@ -66,7 +62,6 @@ jobs:
 
       - name: AI 이슈 응답 실행
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ inputs.repository }}
           ISSUE_NUMBER: ${{ inputs.issue_number }}
           AI_PROVIDER: ${{ inputs.ai_provider }}

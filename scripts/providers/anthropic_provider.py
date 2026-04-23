@@ -9,7 +9,7 @@ class AnthropicProvider(BaseProvider):
 
     @property
     def name(self) -> str:
-        return "anthropic"
+        return f"anthropic ({self._model})"
 
     def review(self, system_prompt: str, user_content: str) -> str:
         response = self._client.messages.create(

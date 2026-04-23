@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   review:
-    uses: your-username/github-ai-reviewer/.github/workflows/pr-review.yml@main
+    uses: mixedsider/github-ai-reviewer/.github/workflows/pr-review.yml@main
     with:
       repository: ${{ github.repository }}
       pr_number: ${{ github.event.pull_request.number }}
