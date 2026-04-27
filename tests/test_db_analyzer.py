@@ -30,6 +30,17 @@ PRISMA_DIFF = """
  }
 """
 
+PRISMA_WITH_MIGRATION_DIFF = """
++++ b/prisma/schema.prisma
+@@ -1,5 +1,6 @@
+ model User {
++  phone String
+ }
++++ b/prisma/migrations/20260427010101_add_phone/migration.sql
+@@ -0,0 +1,2 @@
++ALTER TABLE "User" ADD COLUMN "phone" TEXT;
+"""
+
 NO_ENTITY_DIFF = """
 +++ b/app/utils.py
 @@ -1,3 +1,4 @@
@@ -57,6 +68,13 @@ def test_detects_prisma_schema_change():
     assert result["has_changes"] is True
 
 
+def test_detects_migration_files_with_orm_change():
+    analyzer = DBAnalyzer()
+    result = analyzer.detect_orm_changes(PRISMA_WITH_MIGRATION_DIFF)
+    assert result["has_changes"] is True
+    assert "prisma/migrations/20260427010101_add_phone/migration.sql" in result["migration_files"]
+
+
 def test_no_detection_for_non_entity_files():
     analyzer = DBAnalyzer()
     result = analyzer.detect_orm_changes(NO_ENTITY_DIFF)
@@ -69,3 +87,5 @@ def test_build_db_review_prompt_returns_string():
     prompt = analyzer.build_db_review_prompt(changes)
     assert isinstance(prompt, str)
     assert len(prompt) > 0
+    assert "보수적으로" in prompt
+    assert "함께 변경된 마이그레이션 파일: 없음" in prompt

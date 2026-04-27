@@ -21,7 +21,7 @@ def test_base_provider_has_name_property():
 
 def test_anthropic_provider_name():
     provider = AnthropicProvider(api_key="test-key")
-    assert provider.name == "anthropic"
+    assert provider.name == "anthropic (claude-sonnet-4-6)"
 
 
 def test_anthropic_provider_review_calls_api():
