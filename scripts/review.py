@@ -175,7 +175,7 @@ def truncate_review_text(text: str, max_chars: int) -> str:
     last_break = max(truncated.rfind("\n"), truncated.rfind(". "), truncated.rfind("다."))
     if last_break >= max_chars * 0.6:
         truncated = truncated[:last_break + 1].rstrip()
-    return f"{truncated}\n\n...(응답이 길어 일부 생략됨)"
+    return truncated
 
 
 def _decode_jsonish_string(value: str) -> str:

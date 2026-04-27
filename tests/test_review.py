@@ -69,7 +69,7 @@ def test_prepare_review_section_strips_code_fences_and_truncates():
     result = prepare_review_section(long_text)
 
     assert "```" not in result
-    assert "일부 생략됨" in result
+    assert "일부 생략됨" not in result
     assert len(result) < len(long_text)
 
 
