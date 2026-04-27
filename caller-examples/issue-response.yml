@@ -17,11 +17,12 @@ permissions:
 
 jobs:
   respond:
-    uses: mixedsider/github-ai-reviewer/.github/workflows/issue-response.yml@main
+    uses: mixedsider/github-ai-reviewer/.github/workflows/issue-response.yml@v1
     with:
       repository: ${{ github.repository }}
       issue_number: ${{ github.event.issue.number }}
       ai_provider: "anthropic"        # anthropic / openai / local
+      reviewer_ref: "v1"              # 리뷰어 저장소 릴리스 ref
       # anthropic_model: "claude-sonnet-4-6"  # Claude 모델 선택 (선택사항)
       # openai_model: "gpt-4o"        # OpenAI 사용 시 선택사항
       # local_model_url: "http://..."  # 로컬 모델 사용 시
